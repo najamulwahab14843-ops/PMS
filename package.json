@@ -1,18 +1,13 @@
 {
-  "name": "promotrack",
+  "name": "activation-management-system",
   "version": "1.0.0",
-  "description": "PromoTrack — live field promotion management system (check-in, hourly updates, inventory, EOD reports, manager dashboard).",
-  "main": "server.js",
-  "type": "commonjs",
+  "private": true,
+  "main": "api/index.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
-  },
-  "engines": {
-    "node": ">=18"
+    "start": "node api/index.js"
   },
   "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.19.2"
+    "express": "^4.21.2",
+    "cors": "^2.8.5"
   }
 }
