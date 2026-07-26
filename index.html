@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><Acr></Acr>ctivationTrack — Activation Management Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+<style>
+  /* Minimal table styling for the Attendance / Sales Report tabs —
+     scoped here so it works regardless of what's already in style.css */
+  .report-table { width:100%; border-collapse:collapse; margin:10px 0 22px; font-size:14px; }
+  .report-table th, .report-table td { text-align:left; padding:9px 12px; border-bottom:1px solid rgba(0,0,0,0.08); }
+  .report-table th { font-weight:600; color:#5b6472; text-transform:uppercase; font-size:12px; letter-spacing:.02em; }
+  .report-table tbody tr:hover { background:rgba(0,0,0,0.02); }
+  #mgrTabs { margin:18px 0 20px; }
+
+  /* Check-in session history (promoter portal) */
+  .session-history { margin-top:12px; padding-top:12px; border-top:1px dashed rgba(0,0,0,0.12); }
+  .session-row { display:flex; justify-content:space-between; font-size:13px; color:#5b6472; padding:3px 0; }
+
+  /* Quick-add item chips */
+  .chip-row { display:flex; flex-wrap:wrap; gap:8px; margin:4px 0 14px; }
+  .chip-btn {
+    border:1px solid rgba(0,0,0,0.12); background:#f6f7f9; color:#2b3340;
+    font-size:12.5px; font-weight:600; padding:6px 12px; border-radius:999px;
+    cursor:pointer; transition:background .15s ease;
+  }
+  .chip-btn:hover { background:#eaecef; }
+</style>
+</head>
+<body>
+
+<datalist id="presetItems">
+  <option value="Strawberry Kit">
+  <option value="Pineapple Ice Kit">
+  <option value="Cool Menthol Pods">
+  <option value="Cherry Ice Pods">
+</datalist>
+
+<header id="topbar">
+  <div class="brand">
+    <div class="brand-mark">PT</div>
+    <div class="brand-text">
+      <h1>PromoTrack</h1>
+      <span>Promotion Management System</span>
+    </div>
+  </div>
+  <div id="topbar-right">
+    <div class="sync-indicator"><span class="sync-dot"></span><span id="syncLabel">Live</span></div>
+    <div class="clock" id="clock">--:--:--</div>
+    <nav class="role-toggle">
+      <button id="roleBtnManager" class="active">Manager Dashboard</button>
+      <button id="roleBtnPromoter">Promoter Portal</button>
+    </nav>
+  </div>
+</header>
+
+<main id="viewport">
+
+  <!-- ================= MANAGER VIEW ================= -->
+  <section id="managerView">
+
+    <!-- Manager sign-in gate — shown until a valid manager login is provided -->
+    <div id="managerLoginPanel" class="setup-card hidden">
+      <div class="brand-mark lg">PT</div>
+      <p class="eyebrow center">Manager Access</p>
+      <h2 class="section-title center">Sign in to continue</h2>
+      <div class="panel">
+        <div class="field">
+          <label>Username</label>
+          <input type="text" id="mgrUsername" autocomplete="username">
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" id="mgrPassword" autocomplete="current-password">
+        </div>
+        <p id="mgrLoginError" class="sub hidden" style="color:#c0392b;"></p>
+        <button class="btn btn-primary btn-block" id="mgrLoginBtn">Sign In</button>
+      </div>
+    </div>
+
+    <div id="managerDashboardContent" class="hidden">
+      <p class="eyebrow">Live monitoring — all locations</p>
+      <h2 class="section-title">Manager Dashboard</h2>
+
+      <div class="tabs" id="mgrTabs">
+        <button class="tab-btn active" data-mgrtab="overview">Overview</button>
+        <button class="tab-btn" data-mgrtab="attendance">Attendance</button>
+        <button class="tab-btn" data-mgrtab="sales">Sales Report</button>
+      </div>
+
+      <!-- ---- Overview tab ---- -->
+      <div id="mgrtab-overview">
+        <div class="kpi-strip" id="kpiStrip"></div>
+
+        <div class="toolbar">
+          <input type="text" id="searchInput" placeholder="Search location or postcode…">
+          <select id="filterSelect">
+            <option value="all">All statuses</option>
+            <option value="in">Checked in</option>
+            <option value="out">Not checked in</option>
+            <option value="low">Low / out of stock</option>
+            <option value="issue">Has reported issue</option>
+          </select>
+          <button class="btn btn-primary btn-sm" id="addLocationBtn">+ Add location</button>
+          <button class="btn btn-ghost btn-sm" id="refreshBtn">Refresh</button>
+          <button class="btn btn-outline-danger btn-sm" id="resetBtn">Reset demo data</button>
+          <span class="footnote" id="mgrWhoami" style="margin-left:auto;"></span>
+          <button class="btn btn-ghost btn-sm" id="logoutBtn">Log out</button>
+        </div>
+
+        <div class="grid-cards" id="cardsGrid"></div>
+        <p class="footnote">Auto-refreshing every 6 seconds · <span id="locCount">0</span> locations tracked</p>
+      </div>
+
+      <!-- ---- Attendance tab ---- -->
+      <div id="mgrtab-attendance" class="panel hidden">
+        <h3>Today's Attendance</h3>
+        <p class="sub">Every check-in and check-out logged today, across all locations.</p>
+        <div id="attendanceTable"></div>
+      </div>
+
+      <!-- ---- Sales Report tab ---- -->
+      <div id="mgrtab-sales" class="panel hidden">
+        <h3>Today's Sales Report</h3>
+        <p class="sub">What sold today, and the full hourly sales log across all locations.</p>
+        <div id="salesSummary"></div>
+        <div id="salesLog"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PROMOTER VIEW ================= -->
+  <section id="promoterView" class="hidden">
+
+    <div id="promoterSetup" class="setup-card">
+      <div class="brand-mark lg">PT</div>
+      <p class="eyebrow center">Promoter Portal</p>
+      <h2 class="section-title center">Start your shift</h2>
+      <div class="panel">
+        <div class="field">
+          <label>Your name</label>
+          <input type="text" id="setupName" placeholder="e.g. Ayesha Khan">
+        </div>
+        <div class="field">
+          <label>Assigned location</label>
+          <select id="setupLocation"></select>
+        </div>
+        <div class="field">
+          <label>Or add a new location</label>
+          <input type="text" id="setupNewLocation" placeholder="Type a new location name (optional)">
+        </div>
+        <div class="field">
+          <label>Postcode (for new location)</label>
+          <input type="text" id="setupPostcode" placeholder="e.g. 25000">
+        </div>
+        <button class="btn btn-primary btn-block" id="startShiftBtn">Start Shift →</button>
+      </div>
+    </div>
+
+    <div id="promoterMain" class="hidden">
+      <div class="session-bar">
+        <div>
+          <div class="who" id="sessName"></div>
+          <div class="where" id="sessLoc"></div>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="endSessionBtn">Switch shift</button>
+      </div>
+
+      <div id="checkinBox"></div>
+
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="hourly">Hourly Update</button>
+        <button class="tab-btn" data-tab="inventory">Inventory Report</button>
+        <button class="tab-btn" data-tab="eod">End of Day</button>
+        <button class="tab-btn" data-tab="log">My Submissions</button>
+      </div>
+
+      <div class="panel tab-panel" id="tab-hourly">
+        <h3>Hourly Update</h3>
+        <p class="sub">Submit this every hour — it lands on the manager dashboard instantly.</p>
+        <div class="field"><label>Customer footfall (this hour)</label><input type="number" min="0" id="h_footfall" placeholder="e.g. 42"></div>
+        <div class="field"><label>Sales activity notes</label><textarea id="h_activity" placeholder="What sold well, customer reactions, promo response…"></textarea></div>
+
+        <div class="field"><label>Items sold this hour</label></div>
+        <div class="chip-row">
+          <button type="button" class="chip-btn" onclick="quickAddItemSold('Strawberry Kit')">+ Strawberry Kit</button>
+          <button type="button" class="chip-btn" onclick="quickAddItemSold('Pineapple Ice Kit')">+ Pineapple Ice Kit</button>
+          <button type="button" class="chip-btn" onclick="quickAddItemSold('Cool Menthol Pods')">+ Cool Menthol Pods</button>
+          <button type="button" class="chip-btn" onclick="quickAddItemSold('Cherry Ice Pods')">+ Cherry Ice Pods</button>
+        </div>
+        <div id="itemsSoldRows"></div>
+        <button class="btn btn-ghost btn-sm" id="addItemSoldRowBtn" style="margin-bottom:16px;">+ Add item sold</button>
+
+        <div class="field"><label>Is stock running low?</label>
+          <div class="toggle-pair">
+            <button type="button" id="h_lowYes" onclick="setLow(true)">Yes, running low</button>
+            <button type="button" id="h_lowNo" onclick="setLow(false)">No, stock fine</button>
+          </div>
+        </div>
+        <div class="field"><label>Issues or problems (if any)</label><textarea id="h_issues" placeholder="e.g. AC not working, no parking signage…"></textarea></div>
+        <div class="field"><label>Other comments</label><textarea id="h_comments" placeholder="Anything else worth flagging"></textarea></div>
+        <button class="btn btn-primary" id="submitHourlyBtn">Submit Hourly Update</button>
+      </div>
+
+      <div class="panel tab-panel hidden" id="tab-inventory">
+        <h3>Inventory Report</h3>
+        <p class="sub">Log current stock — submit hourly if needed, and always at end of day.</p>
+        <div class="field"><label>Current stock on hand</label></div>
+        <div id="stockRows"></div>
+        <button class="btn btn-ghost btn-sm" id="addStockRowBtn" style="margin-bottom:16px;">+ Add item</button>
+        <div class="field"><label>Missing products</label><textarea id="i_missing" placeholder="Products that should be here but aren't"></textarea></div>
+        <div class="field"><label>Out-of-stock flavours / variants</label><textarea id="i_oos" placeholder="e.g. Mango flavour, Large size"></textarea></div>
+        <div class="field"><label>Low stock alert</label>
+          <div class="toggle-pair">
+            <button type="button" id="i_lowYes" onclick="setInvLow(true)">Yes, alert manager</button>
+            <button type="button" id="i_lowNo" onclick="setInvLow(false)">No, stock healthy</button>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="submitInventoryBtn">Submit Inventory Report</button>
+      </div>
+
+      <div class="panel tab-panel hidden" id="tab-eod">
+        <h3>End of Day Report</h3>
+        <p class="sub">One per shift — submitting again today will replace your earlier EOD report.</p>
+        <div class="field-row">
+          <div class="field"><label>Total sales today</label><input type="number" min="0" id="e_sales"></div>
+          <div class="field"><label>Samples left</label><input type="number" min="0" id="e_samples"></div>
+        </div>
+        <div class="field"><label>Remaining inventory (summary)</label><textarea id="e_inventory" placeholder="Units remaining, by product"></textarea></div>
+        <div class="field"><label>Remaining flavours / variants</label><textarea id="e_flavours"></textarea></div>
+        <div class="field"><label>Overall summary of the day</label><textarea id="e_summary"></textarea></div>
+        <div class="field"><label>Issues or feedback</label><textarea id="e_feedback"></textarea></div>
+        <button class="btn btn-primary" id="submitEodBtn">Submit End of Day Report</button>
+      </div>
+
+      <div class="panel tab-panel hidden" id="tab-log">
+        <h3>My Submissions Today</h3>
+        <p class="sub">Everything you've sent in for this shift.</p>
+        <div id="myLog"></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div id="modalRoot"></div>
+<div id="toastRoot"></div>
+
+<script src="/app.js"></script>
+</body>
+</html>CD

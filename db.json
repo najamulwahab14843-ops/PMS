@@ -1,0 +1,255 @@
+{
+  "locations": [
+    "KHAADI",
+    "BEE HONEY",
+    "VSHXVX",
+    "wfy",
+    "tere"
+  ],
+  "data": {
+    "KHAADI": {
+      "checkin": {
+        "name": "DEENA",
+        "ts": 1785079972480,
+        "date": "2026-07-26",
+        "checkedOutTs": 1785080014854
+      },
+      "attendance": [
+        {
+          "name": "DEENA",
+          "checkinTs": 1785079972480,
+          "checkoutTs": 1785080014854,
+          "date": "2026-07-26"
+        }
+      ],
+      "hourlyUpdates": [
+        {
+          "ts": 1785079968659,
+          "promoter": "DEENA",
+          "footfall": "12",
+          "sales": 0,
+          "activity": "EVERTHING",
+          "lowStock": false,
+          "issues": "NOTHING",
+          "comments": "EVERTHYM FINE",
+          "itemsSold": [
+            {
+              "item": "Strawberry Kit",
+              "qty": "45"
+            },
+            {
+              "item": "Pineapple Ice Kit",
+              "qty": "23"
+            }
+          ]
+        }
+      ],
+      "inventoryReports": [
+        {
+          "ts": 1785079990519,
+          "promoter": "DEENA",
+          "stock": [
+            {
+              "item": "Cool Menthol Pods",
+              "qty": ""
+            }
+          ],
+          "missing": "QW",
+          "oos": "NCDB",
+          "lowStockAlert": true
+        }
+      ],
+      "eod": {
+        "ts": 1785080006273,
+        "date": "2026-07-26",
+        "promoter": "DEENA",
+        "sales": "12",
+        "samples": "34",
+        "inventory": "CNSN",
+        "flavours": "DC",
+        "summary": "CDC",
+        "feedback": "DC"
+      }
+    },
+    "BEE HONEY": {
+      "checkin": {
+        "name": "SARA",
+        "ts": 1785080091818,
+        "date": "2026-07-26",
+        "checkedOutTs": 1785080405725
+      },
+      "attendance": [
+        {
+          "name": "SARA",
+          "checkinTs": 1785080091818,
+          "checkoutTs": 1785080405725,
+          "date": "2026-07-26"
+        }
+      ],
+      "hourlyUpdates": [
+        {
+          "ts": 1785080110132,
+          "promoter": "SARA",
+          "footfall": "23",
+          "sales": 0,
+          "activity": "BDSB",
+          "lowStock": true,
+          "issues": "ANHGF",
+          "comments": "SCG",
+          "itemsSold": [
+            {
+              "item": "Strawberry Kit",
+              "qty": ""
+            },
+            {
+              "item": "Pineapple Ice Kit",
+              "qty": ""
+            },
+            {
+              "item": "Cool Menthol Pods",
+              "qty": ""
+            }
+          ]
+        }
+      ],
+      "inventoryReports": [],
+      "eod": null
+    },
+    "VSHXVX": {
+      "checkin": {
+        "name": "SARA",
+        "ts": 1785080918646,
+        "date": "2026-07-26",
+        "checkedOutTs": 1785080919632
+      },
+      "attendance": [
+        {
+          "name": "SARA",
+          "checkinTs": 1785080427698,
+          "checkoutTs": 1785080428430,
+          "date": "2026-07-26"
+        },
+        {
+          "name": "SARA",
+          "checkinTs": 1785080918646,
+          "checkoutTs": 1785080919632,
+          "date": "2026-07-26"
+        }
+      ],
+      "hourlyUpdates": [],
+      "inventoryReports": [],
+      "eod": null
+    },
+    "wfy": {
+      "checkin": {
+        "name": "dbsja",
+        "ts": 1785083361079,
+        "date": "2026-07-26",
+        "checkedOutTs": 1785083386280
+      },
+      "attendance": [
+        {
+          "name": "dbsja",
+          "checkinTs": 1785083361079,
+          "checkoutTs": 1785083386280,
+          "date": "2026-07-26"
+        }
+      ],
+      "hourlyUpdates": [
+        {
+          "ts": 1785083369516,
+          "promoter": "dbsja",
+          "footfall": 0,
+          "activity": "rtqrw",
+          "lowStock": true,
+          "issues": "",
+          "comments": "",
+          "itemsSold": [
+            {
+              "item": "Cool Menthol Pods",
+              "qty": ""
+            }
+          ]
+        }
+      ],
+      "inventoryReports": [
+        {
+          "ts": 1785083373273,
+          "promoter": "dbsja",
+          "stock": [],
+          "missing": "",
+          "oos": "",
+          "lowStockAlert": false
+        },
+        {
+          "ts": 1785083374742,
+          "promoter": "dbsja",
+          "stock": [],
+          "missing": "",
+          "oos": "",
+          "lowStockAlert": true
+        }
+      ],
+      "eod": {
+        "ts": 1785083382035,
+        "date": "2026-07-26",
+        "promoter": "dbsja",
+        "sales": "42356",
+        "samples": "24254",
+        "inventory": "qwe",
+        "flavours": "",
+        "summary": "",
+        "feedback": ""
+      }
+    },
+    "tere": {
+      "checkin": {
+        "name": "lala",
+        "ts": 1785083444004,
+        "date": "2026-07-26",
+        "checkedOutTs": null
+      },
+      "attendance": [
+        {
+          "name": "lala",
+          "checkinTs": 1785083444004,
+          "checkoutTs": null,
+          "date": "2026-07-26"
+        }
+      ],
+      "hourlyUpdates": [
+        {
+          "ts": 1785083440983,
+          "promoter": "lala",
+          "footfall": 0,
+          "activity": "",
+          "lowStock": true,
+          "issues": "",
+          "comments": "",
+          "itemsSold": [
+            {
+              "item": "Cool Menthol Pods",
+              "qty": "09"
+            },
+            {
+              "item": "Pineapple Ice Kit",
+              "qty": "54352"
+            },
+            {
+              "item": "Strawberry Kit",
+              "qty": "33"
+            }
+          ]
+        }
+      ],
+      "inventoryReports": [],
+      "eod": null
+    }
+  },
+  "postcodes": {
+    "KHAADI": "8746ABC",
+    "VSHXVX": "SHGD6536",
+    "wfy": "wr6256",
+    "tere": "3w4d5f"
+  }
+}
